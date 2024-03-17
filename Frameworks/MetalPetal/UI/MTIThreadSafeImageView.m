@@ -154,11 +154,12 @@ __attribute__((objc_subclassing_restricted))
 - (void)didMoveToWindow {
     [super didMoveToWindow];
     [_lock lock];
-    if (self.window.screen) {
-        _screenScale = MIN(self.window.screen.nativeScale, self.window.screen.scale);
-    } else {
-        _screenScale = 1.0;
-    }
+  if (@available(iOS 13.0, *)) {
+    _screenScale = UITraitCollection.currentTraitCollection.displayScale;
+  } else {
+    // Fallback on earlier versions
+    _screenScale = 1.0;
+  }
     [_lock unlock];
 }
 
